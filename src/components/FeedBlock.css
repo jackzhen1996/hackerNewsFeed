@@ -1,0 +1,134 @@
+.mainFeedContainer{
+  width: 85%;
+  margin: 2%;
+  border-radius: 4px;
+  background-color: white;
+  padding-bottom: 20%;
+}
+
+.feedBlockContainer, .feedBlockContainerExpanded {
+  border-radius: 4px;
+  width: 90%;
+  padding: 2%;
+  margin: auto;
+  margin-top: 1%;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+  outline: none;
+  text-align: left;
+  color: #BEBEBE;
+  transition: 0.3s;
+  transition-timing-function: ease-out;
+  animation: opacity 0.8s ease-out;
+  scroll-snap-align: center;
+}
+
+@keyframes opacity {
+  from{opacity: 0%;}
+  to{opacity: 100%;}
+}
+
+.feedBlockContainer:hover {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.feedBlockContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.feedBlockContainerExpanded {
+  display: flex;
+  flex-direction: column;
+}
+
+.feedBlockContainerExpanded {
+  height: auto;
+}
+
+.title, .scoreContainer  {
+  font-size: 18px;
+  font-weight: 500;
+  color: black;
+
+}
+
+.scoreContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.score {
+  text-align: center;
+}
+
+.leftContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.rightContainer {
+  flex: 8;
+}
+
+.rightContainer a{
+  color: black;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.middleContainer {
+  margin-top: 7px;
+  display: flex;
+  width: 300px;
+}
+
+.time {
+  text-decoration: underline;
+  width: 50%;
+}
+
+.authorContainer {
+  width: 260px;
+}
+
+.lowerContainer {
+  margin-top: 20px;
+  display: flex;
+}
+
+.icon:hover {
+  cursor: pointer;
+  outline: none;
+}
+
+.icon {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.commentText{
+  display: inline-block;
+  width: 150px;
+}
+
+.bookmarkContainer {
+  width: 200px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.expandComments span, .bookmarkContainer span{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.expandComments:hover, .bookmarkContainer:hover, .expandedComments {
+  color: #EE6F2D;
+  cursor: pointer;
+}
+

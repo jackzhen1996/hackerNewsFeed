@@ -1,7 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import './components.css';
-import CommentBlock from './CommentBlock';
+import './FeedBlock.css';
+import CommentBlock from './CommentBlock.js';
+import Moment from 'react-moment';
+import CommentOrSave from './CommentOrSave.js';
+import UpvoteIcon from './UpvoteIcon.js';
 
 type FeedBlockProps= {
   title: string,
@@ -10,100 +13,142 @@ type FeedBlockProps= {
   by: string,
   time: string,
   commentLength: number,
-  comments: number[]
-};
-
-type CommentShape = {
-  by: string,
-  id: number,
-  kids: number[],
-  parent: number,
-  text: string,
-  time: number,
+  comments: number[],
   type: string,
-  order: number
 };
 
+// this don't work right now
+// type CommentShape = {
+//   by: string,
+//   id: number,
+//   kids: number[],
+//   parent: number,
+//   text: string,
+//   time: number,
+//   type: string,
+//   order: number,
+// };
 
-const FeedBlock = ({id, title, url, score, by, time, commentLength, comments }: FeedBlockProps) => {
+
+const FeedBlock = ({id, title, url, score, by, time, commentLength, comments, type}: FeedBlockProps) => {
   const [expand, setExpand] = useState(false);
   const [data, setData] = useState([]);
   const [bookmark, isBookmarked] = useState(false);
   const feedBlockRef = useRef(null);
+  const [error,setError] = useState(null);
+
+  // expand the comment section and get data from server
   const expandComments = () => {
-    // get the data
+    if (!comments) {
+      setError('No comments');
+    } else {
     if (!expand && data.length === 0 ) {
       axios.get('http://localhost:3001/getComments', {
         params: {comments: comments}
       })
         .then(result=>{
-          console.log(result.data)
           setData(result.data);
-          // expand
-          setExpand(!expand);
-
         })
         .catch(err=>{throw err})
     }
+    }
+    setExpand(!expand);
+
 
   };
 
+  // add current story to bookmark list
   const handleBookmark = () => {
     axios.post('http://localhost:3001/bookmark', {
       id: id
     })
       .then(success=>{
-        console.log(success.data)
         isBookmarked(!bookmark);
       })
       .catch(err=>{throw err})
-  }
+  };
 
-  // const getMeasurementFromTop = useCallback(node=>{
-  //   let bottom = node.getBoundingClientRect().bottom;
-  //   window.
-  // },[]);
-  const observerCB = (entries) => {
-    const [entry] = entries;
-    if (!entry.isIntersecting) {
-      console.log(`${entry.target.dataset.id} is ${entry.isIntersecting}`);
-    }
-  }
-
-  const option = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0
+  // add current story to the list of seen post
+  const sendSeenPosts = (id) => {
+    return axios.post('http://localhost:3001/record',{
+      id: id
+    });
   };
 
   useEffect(()=>{
+    /*
+      How to track if element is completely out of viewport:
+        - place imaginary box outside of viewport
+        - check if the item of interest is completely inside the viewport
+        - if the item is completely inside the imaginary box that means it is completely outside the viewport
+    */
+
+    /*
+    option for intersection observer to check for intersection with FeedBlock components
+    root: null because it defaults to the viewport
+    rootMargin: top margin goes above the viewport by 30% so top border is above the viewport,
+    the bottom margin is -100% so the border is at the top of the screen, and 0px on left and right
+    threshold: 1 because the entire FeedBlock component has to fit within the rootMargins to count as scrolled pasts
+    */
+    const option = {
+      root: null,
+      rootMargin: '30% 0px -100%',
+      threshold: 1
+    };
+    // checks for intersection
+    const observerCB = (entries) => {
+      const [entry] = entries;
+      if (entry.isIntersecting) {
+        sendSeenPosts(entry.target.dataset.id)
+          .then(result=>{
+            // console.log(result.data)
+          })
+      }
+    }
+
+    // only do the intersection check if its currently at the 'New' tab
+    if (type === 'data') {
     const observer = new IntersectionObserver(observerCB, option);
-    if (feedBlockRef.current) observer.observe(feedBlockRef.current);
+    if (feedBlockRef.current) {
+      observer.observe(feedBlockRef.current);
+    };
     return ()=> {
       if (feedBlockRef.current) observer.unobserve(feedBlockRef.current);
     }
-  },[option])
+  }
+
+  },[type]);
 
   return (
-  <div ref={feedBlockRef} data-id ={id} className= {data.length > 0? 'feedBlockContainerExpanded':'feedBlockContainer'}>
-    {id}
+  <div ref={feedBlockRef} data-id ={id} className= {expand? 'feedBlockContainerExpanded':'feedBlockContainer'}>
+    <div className='leftContainer'>
+      <div className='scoreContainer'>
+       <div><UpvoteIcon /></div>
+        <div className='score'>{score} PTS</div>
+        </div>
+    </div>
+    <div className='rightContainer'>
     <div className='upperContainer'>
-      {title}
-      <a href={url}>{url}</a>
+      <span className='title'><a href={url}> {title} ( {url && url.slice(0,30)}... )</a> </span>
     </div>
     <div className='middleContainer'>
-      {score}
-       | by {by} |
-      {time} | <span className='expandComments' onClick={expandComments}>{commentLength} comments</span>
-      <span onClick={handleBookmark}> {bookmark? 'Bookmarked': 'Bookmark'}</span>
+      <span className='authorContainer'>Posted by <span className='author'>{by} </span></span>
+      <span className='time'><Moment fromNow>{new Date(time*1000)}</Moment></span>
+    </div>
+    <div className='lowerContainer'>
+      <CommentOrSave expand={expand} commentLength={commentLength} type='comment' expandComments={expandComments}/>
+      <CommentOrSave bookmark={bookmark} type='save' handleBookmark={handleBookmark}/>
+    </div>
+
     </div>
     {
-      expand?
-      data.map((comment, k)=>
+      expand &&
+      (data.length > 0? data.map((comment, k)=>
         <CommentBlock type={comment.type} key={k} text={comment.text} by={comment.by} kids={comment.kids} time={comment.time}/>
       )
       :
-      null
+      error? error : <div className="lds-ring"><div></div><div></div><div></div><div></div></div>)
+
     }
   </div>
   )

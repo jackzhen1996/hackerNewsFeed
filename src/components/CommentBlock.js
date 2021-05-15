@@ -1,6 +1,7 @@
-import React, { useEffect, useState, FC } from 'react';
-import './components.css';
+import React, { useState } from 'react';
+import './CommentBlock.css';
 import axios from 'axios';
+import Moment from 'react-moment';
 
 type CommentObj = {
   type: string,
@@ -11,11 +12,6 @@ type CommentObj = {
   kids: number[],
   parent: number
 };
-
-// interface CommentProps {
-//   data: CommentObj[]
-// };
-
 
 const CommentBlock = ({type, id, text, by, time, kids, parent}: CommentObj) => {
 
@@ -34,27 +30,29 @@ const CommentBlock = ({type, id, text, by, time, kids, parent}: CommentObj) => {
         })
         .catch(err=>{throw err})
     }
-
-    // expand
     setExpand(!expand);
   };
 
   return (
     <div className='commentContainer'>
       <div>
-      <div><span>{by}</span> <span>{time}</span></div>
-      <div>{text}</div>
+      <div><span className='author'>{by}</span> <span className='time'><Moment fromNow>{new Date(time*1000)}</Moment></span></div>
+      <div className='commentBody'>{text}</div>
       {
         kids ?
-        <span onClick={expandComments} className='expandComments'>{kids.length} comments</span>
+        <span onClick={expandComments} className={expand?'expandedComments':'expandComments'}>{kids.length} comments</span>
         :
         <span>0 comments</span>
       }
       </div>
       {
-        data && data.map((comment,k)=>
+        expand && (
+          data.length > 0?
+          data.map((comment,k)=>
           <CommentBlock type={comment.type} key={k} text={comment.text} by={comment.by} kids={comment.kids} time={comment.time}/>
         )
+        :
+        <div className="lds-ring"><div></div><div></div><div></div><div></div></div>)
       }
     </div>
   )

@@ -1,15 +1,88 @@
+
+
+body {
+  background-color: #FAFBFC;
+}
+
 .App {
   text-align: center;
   width: 100%;
   overflow-y: scroll;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+
 }
 
 .mainContainer {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid red;
+  flex-direction: row;
+
+}
+
+.topContainer {
+  width: 85%;
+  height: 95px;
+  display: flex;
+  width: 100%;
+  background-color: white;
+
+}
+
+.titleBlock {
+  font-size: 30px;
+  font-weight: 700;
+  align-self: center;
+  margin-left: 3%;
+  display: flex;
+  text-align: left;
+}
+
+.titleBlock div {
+  font-size: 45px;
+  border: 5px solid #EE6F2D;
+  color: #EE6F2D;
+  height: 45px;
+  width: 50px;
+  margin-right: 5px;
+  padding-bottom: 8px;
+  text-align: center;
+}
+
+.sideBar {
+  /* height: 100%; */
+  width: 200px;
+  background-color: #FAFBFC;
+  margin-top: 2%;
+  font-weight: 600;
+}
+
+.sideBar div{
+  text-align: left;
+  margin-left: 20px;
+}
+
+.bookmark, .bookmark:hover, .bookmarkActive {
+  margin-top: 20px;
+  font-weight: 700;
+  font-size: 20px;
+  padding: 10px;
+}
+
+.bookmark {
+  background-color: none;
+  transition: 0.2s;
+  transition-timing-function: ease-out;
+
+}
+
+.bookmark:hover, .bookmarkActive{
+  cursor: pointer;
+  background-color: #FFE9DE;
+}
+
+.author {
+  color: #EE6F2D;
 }
 
 
