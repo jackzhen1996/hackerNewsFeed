@@ -23,7 +23,7 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts start && npm run server",
     "build": "react-scripts build",
     "test": "react-scripts test -u",
     "eject": "react-scripts eject",
