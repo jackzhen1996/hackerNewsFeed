@@ -6,6 +6,12 @@
   padding-bottom: 20%;
 }
 
+@media only screen and (max-width: 600px) {
+  .mainFeedContainer {
+    width: 100%;
+  }
+}
+
 .feedBlockContainer, .feedBlockContainerExpanded {
   border-radius: 4px;
   width: 90%;
@@ -16,15 +22,16 @@
   outline: none;
   text-align: left;
   color: #BEBEBE;
-  transition: 0.3s;
-  transition-timing-function: ease-out;
   animation: opacity 0.8s ease-out;
   scroll-snap-align: center;
 }
 
 @keyframes opacity {
-  from{opacity: 0%;}
-  to{opacity: 100%;}
+  0% {opacity: 0%;}
+  25% {opacity: 25%}
+  50% {opacity: 50%;}
+  75% {opacity: 75%}
+  100% {opacity: 100%;}
 }
 
 .feedBlockContainer:hover {

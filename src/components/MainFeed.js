@@ -28,7 +28,7 @@ const MainFeed: FC<MainFeedProps> = ({data,type, getType, error, loading, firstS
       <div className='categoriesContainer'>
         <div className='categories'><span className={type==='data'? 'typeActive': null} onClick={()=>getType('data')}>New</span><span className={type==='seen'? 'typeActive': null}  onClick={()=>getType('seen')}>Seen</span><span>Show</span><span>Jobs</span><span>Ask</span></div>
       </div>
-      {data.length !== 0 ? data.map((post,k)=>
+      {data && data.length !== 0 ? data.map((post,k)=>
         <FeedBlock type= {type} id={post.id} comments={post.kids} key={k} title = {post.title} url={post.url}
         score={post.score} by={post.by} time={post.time} commentLength ={post.descendants}
         />

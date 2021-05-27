@@ -1,5 +1,6 @@
 const axios = require('axios');
 const bookmarks = new Set();
+// seen array resets after server restarts
 const seen = new Set();
 let ids;
 let feedArray = [];

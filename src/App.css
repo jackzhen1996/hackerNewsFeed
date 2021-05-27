@@ -8,9 +8,6 @@ body {
   text-align: center;
   width: 100%;
   overflow-y: scroll;
-  scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
-
 }
 
 .mainContainer {
@@ -20,13 +17,18 @@ body {
 
 }
 
+@media only screen and (max-width: 600px) {
+  .mainContainer {
+    flex-direction: column;
+  }
+}
+
 .topContainer {
   width: 85%;
   height: 95px;
   display: flex;
   width: 100%;
   background-color: white;
-
 }
 
 .titleBlock {

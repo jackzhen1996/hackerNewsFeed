@@ -58,7 +58,7 @@ const App = () => {
     setCurrent("bookmark");
   };
 
-  // opens "Seen" view with post scrolled past previously
+  // opens "Seen" view with posts scrolled past previously
   const handleSeenPosts = () => {
     axios
       .get("http://localhost:3001/getSeenPosts")
@@ -123,7 +123,7 @@ const App = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [handleScroll,initial]);
 
   const changeView = (view: string) => {
     if (view === "seen") {
@@ -142,10 +142,10 @@ const App = () => {
       </div>
       <div className="mainContainer">
         <div className="sideBar">
-          <div>Hello, Jack!</div>
+          <h4>Hello, Jack!</h4>
           <div
             className={
-              currentType == "bookmark" ? "bookmarkActive" : "bookmark"
+              currentType === "bookmark" ? "bookmarkActive" : "bookmark"
             }
             onClick={handleBookmarkView}
           >
